@@ -1,33 +1,33 @@
 trigger:
 - unit-test
-
 pool: ofqual-agent
 
 variables:
   buildConfiguration: 'Release'
+  dotnetSdkVersion: '5.0.301'
 
 stages:
   - stage: build
+
     jobs:
     - job: 'build'
+
       steps:
+      - checkout: self  #    
       - task: UseDotNet@2
         displayName: 'Use DotNet 6'  
         inputs:
           packageType: 'sdk'
-          version: '5.0.301'
+          version: '$(dotnetSdkVersion)'
+          performMultiLevelLookup: true
+          includePreviewVersions: true
           installationPath: $(Agent.ToolsDirectory)/dotnet
-
-      - script: |
-          echo '{"sdk": {"version": "5.0.301"}}' > global.json
-        displayName: 'Set global.json for SDK version'
-
       - task: DotNetCoreCLI@2
         displayName: 'dotnet restore'
         inputs:
           command: restore
           projects: '**/*.csproj'
-
+          
       - task: DotNetCoreCLI@2
         displayName: 'dotnet build'
         inputs:
@@ -49,10 +49,9 @@ stages:
           publishWebProjects: True
           arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
           zipAfterPublish: True
-
+        
       - task: PublishBuildArtifacts@1
         displayName: 'publish artifacts'
         inputs:
-          pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
           artifactName: 'myWebsiteName'
-

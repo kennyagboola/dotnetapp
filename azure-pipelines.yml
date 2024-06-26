@@ -4,6 +4,7 @@ pool: ofqual-agent
 
 variables:
   buildConfiguration: 'Release'
+  dotnetSdkVersion: '5.0.301'
 
 stages:
   - stage: build
@@ -13,6 +14,14 @@ stages:
 
       steps:
       - checkout: self  #    
+      - task: UseDotNet@2
+        displayName: 'Use DotNet 6'  
+        inputs:
+          packageType: 'sdk'
+          version: '$(dotnetSdkVersion)'
+          performMultiLevelLookup: true
+          includePreviewVersions: true
+          installationPath: $(Agent.ToolsDirectory)/dotnet
       - task: DotNetCoreCLI@2
         displayName: 'dotnet restore'
         inputs:

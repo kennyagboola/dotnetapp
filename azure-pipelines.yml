@@ -15,11 +15,6 @@ stages:
       steps:
       - checkout: self  #    
       - task: UseDotNet@2
-        displayName: 'Install .NETCore SDK'
-        inputs:
-        packageType: 'sdk'
-        version: '$(dotnetSdkVersion)'
-      - task: UseDotNet@2
         displayName: 'Use DotNet 6'  
         inputs:
           packageType: 'sdk'

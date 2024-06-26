@@ -12,6 +12,7 @@ stages:
     - job: 'build'
 
       steps:
+      - checkout: self  #    
       - task: UseDotNet@2
         displayName: 'Use DotNet 6'  
         inputs:

@@ -12,7 +12,13 @@ stages:
     - job: 'build'
 
       steps:
-
+      - task: UseDotNet@2
+        displayName: 'Use DotNet 6'  
+        inputs:
+          packageType: 'sdk'
+          version: '6.0.415'
+          installationPath: $(Agent.ToolsDirectory)/dotnet
+      
       - task: DotNetCoreCLI@2
         displayName: 'dotnet restore'
         inputs:

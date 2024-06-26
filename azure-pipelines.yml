@@ -16,7 +16,7 @@ stages:
         displayName: 'Use DotNet 6'  
         inputs:
           packageType: 'sdk'
-          version: '6.0.415'
+          version: '6.0'
           installationPath: $(Agent.ToolsDirectory)/dotnet
       
       - task: DotNetCoreCLI@2

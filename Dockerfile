@@ -3,7 +3,7 @@ WORKDIR /app
 
 # Copy the .csproj and restore dependencies
 COPY *.csproj ./
-
+RUN dotnet restore
 
 # Copy the remaining source code and build the application
 COPY . ./

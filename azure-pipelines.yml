@@ -13,7 +13,12 @@ stages:
 
       steps:
       - checkout: self  #    
-
+      - task: DotNetCoreCLI@2
+        displayName: 'dotnet restore'
+        inputs:
+          command: restore
+          projects: '**/*.csproj'
+          
       - task: DotNetCoreCLI@2
         displayName: 'dotnet build'
         inputs:

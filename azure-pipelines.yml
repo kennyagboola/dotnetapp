@@ -24,4 +24,5 @@ stages:
           containerRegistry: 'cgi-acr-connection'  # ACR name
           tags: |
             $(Build.BuildId)
+            
  

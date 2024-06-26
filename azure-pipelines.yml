@@ -14,10 +14,10 @@ stages:
       steps:
       - checkout: self  #    
       - task: UseDotNet@2
-        displayName: 'Use DotNet 6'  
+        displayName: 'Use DotNet 5'  
         inputs:
           packageType: 'sdk'
-          version: 5.x
+          version: 5.0.301
           performMultiLevelLookup: true
           includePreviewVersions: true
           installationPath: $(Agent.ToolsDirectory)/dotnet

@@ -1,58 +1,27 @@
-
 trigger:
-- unit-test
+- dev  # Trigger pipeline on changes to the main branch
+variables:
+- name: DOCKER_BUILDKIT
+  value: 1
 pool: ofqual-agent
 
-variables:
-  buildConfiguration: 'Release'
-  dotnetSdkVersion: '5.0.301'
-
 stages:
-  - stage: build
-
-    jobs:
-    - job: 'build'
-
+  - stage: Build
+    displayName: Build and push stage
+    jobs:  
+    - job: Build
+      displayName: Build job
+      # pool:
+      #   vmImage: 'windows-2019'
       steps:
-      - checkout: self  #    
-      - task: UseDotNet@2
-        displayName: 'Use DotNet 6'  
+      - checkout: self  # Checkout the repository
+      - task: Docker@2
+        displayName: Build and push an image to container registry
         inputs:
-          packageType: 'sdk'
-          version: '$(dotnetSdkVersion)'
-          performMultiLevelLookup: true
-          includePreviewVersions: true
-          installationPath: $(Agent.ToolsDirectory)/dotnet
-      - task: DotNetCoreCLI@2
-        displayName: 'dotnet restore'
-        inputs:
-          command: restore
-          projects: '**/*.csproj'
-          
-      - task: DotNetCoreCLI@2
-        displayName: 'dotnet build'
-        inputs:
-          command: build
-          projects: '**/*.csproj'
-          arguments: '--configuration $(buildConfiguration)'
-
-      - task: DotNetCoreCLI@2
-        displayName: 'dotnet test'
-        inputs:
-          command: test
-          projects: '**/*Test/*.csproj'
-          arguments: '--configuration $(buildConfiguration)'
-
-      - task: DotNetCoreCLI@2
-        displayName: 'dotnet publish'
-        inputs:
-          command: publish
-          publishWebProjects: True
-          arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-          zipAfterPublish: True
-        
-      - task: PublishBuildArtifacts@1
-        displayName: 'publish artifacts'
-        inputs:
-          pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-          artifactName: 'myWebsiteName'
+          command: buildAndPush
+          repository: 'bolaacr.azurecr.io/frontend'  # ACR and image name
+          dockerfile: '$(Build.SourcesDirectory)/Dockerfile'  # Path to Dockerfile
+          containerRegistry: 'cgi-acr-connection'  # ACR name
+          tags: |
+            $(Build.BuildId)
+ 

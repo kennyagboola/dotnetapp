@@ -1,5 +1,6 @@
 trigger:
-- master
+- unit-test
+pool: ofqual-agent
 
 variables:
   buildConfiguration: 'Release'
@@ -9,9 +10,6 @@ stages:
 
     jobs:
     - job: 'build'
-    
-      pool:
-        vmImage: 'ubuntu-latest'
 
       steps:
 
